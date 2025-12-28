@@ -5,10 +5,10 @@ function Entity:new(x, y, height, world)
     local entity = {}
     setmetatable(entity, self)
 
-    entity.startX = x
+    entity.x = x
     entity.startY = y
 
-    entity.collider = world:newRectangleCollider(entity.startX, entity.startY, 10, height)
+    entity.collider = world:newRectangleCollider(entity.x, entity.startY, 10, height)
     entity.collider:setRestitution(0.5)
     entity.collider:setCollisionClass('Entity')
 
@@ -16,7 +16,7 @@ function Entity:new(x, y, height, world)
 end
 
 function Entity:reset()
-    self.collider:setPosition(self.startX + 5, self.startY + 100)
+    self.collider:setPosition(self.x + 5, self.startY + 100)
     self.collider:setLinearVelocity(0, 0)
 end
 
