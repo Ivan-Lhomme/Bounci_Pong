@@ -1,0 +1,109 @@
+function love.load()
+    wf = require "libraries/windfield"
+    Entity = require "Entity"
+    Ball = require "Ball"
+
+    gameStop = false
+    jumpCooldown = 0
+    startBallVelocity = {-200, 200}
+
+    debug = false
+
+    world = wf.newWorld(0, 500, true)
+    world:setGravity(0, 500)
+
+    world:addCollisionClass('Entity')
+    world:addCollisionClass('Wall')
+    world:addCollisionClass('Ball')
+    world:addCollisionClass('WinWall')
+    world:addCollisionClass('StuckWall', {ignores = {Ball}})
+
+    player = Entity:new(0, 400, 200, world)
+    player2 = Entity:new(790, 400, 200, world)
+    ball = Ball:new(world)
+
+    ball.collider:setLinearVelocity(startBallVelocity[love.math.random(1, 2)], 0)
+
+    wallLeftWin = world:newRectangleCollider(-2, 0, 1, 600)
+    wallLeftWin:setType('static')
+    wallLeftWin:setCollisionClass('WinWall')
+
+    wallRightWin = world:newRectangleCollider(801, 0, 1, 600)
+    wallRightWin:setType('static')
+    wallRightWin:setCollisionClass('WinWall')
+
+    wallLeftStuck = world:newRectangleCollider(11, 0, 1, 600)
+    wallLeftStuck:setType('static')
+    wallLeftStuck:setCollisionClass('WinWall')
+
+    wallRightStuck = world:newRectangleCollider(789, 0, 1, 600)
+    wallRightStuck:setType('static')
+    wallRightStuck:setCollisionClass('WinWall')
+
+    top = world:newRectangleCollider(0, -1, 800, 1)
+    top:setType('static')
+    top:setCollisionClass('Wall')
+
+    ground = world:newRectangleCollider(0, 600, 800, 1)
+    ground:setType('static')
+    ground:setCollisionClass('Wall')
+end
+
+function love.update(dt)
+    if not gameStop then
+        world:update(dt)
+
+        if jumpCooldown > 0 then
+            jumpCooldown = jumpCooldown - dt
+        end
+    end
+end
+
+function love.draw()
+    if debug then
+        world:draw()
+    else
+        player:draw()
+        player2:draw()
+        ball:draw()
+        colliderDraw(ground)
+    end
+end
+
+function love.keypressed(key)
+    if key == "escape" then
+        gameStop = not gameStop
+    end
+
+    if key == "space" and jumpCooldown <= 0 then
+        player.collider:applyLinearImpulse(0, -2500)
+        jumpCooldown = 0.5
+    end
+
+    if key == "r" then
+        restartGame()
+    end
+
+    if key == "p" then
+        player.collider:setRestitution(1.5)
+    end
+
+    if key == "m" then
+        player.collider:setRestitution(0.5)
+    end
+
+    if key == "o" then
+        debug = not debug
+    end
+end
+
+function colliderDraw(collider)
+    local x1, y1, x2, y2 = collider:getBoundingBox()
+    love.graphics.rectangle("fill", x1, y1, x2 - x1, y2 - y1)
+end
+
+function restartGame()
+    player:reset()
+    player2:reset()
+    ball:reset()
+end
