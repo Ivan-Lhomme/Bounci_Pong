@@ -5,7 +5,6 @@ function love.load()
 
     gameStop = false
     jumpCooldown = 0
-    startBallVelocity = {-200, 200}
 
     debug = false
 
@@ -20,9 +19,8 @@ function love.load()
 
     player = Entity:new(0, 400, 200, world)
     player2 = Entity:new(790, 400, 200, world)
-    ball = Ball:new(world)
 
-    ball.collider:setLinearVelocity(startBallVelocity[love.math.random(1, 2)], 0)
+    ball = Ball:new(world)
 
     wallLeftWin = world:newRectangleCollider(-2, 0, 1, 600)
     wallLeftWin:setType('static')
@@ -51,11 +49,16 @@ end
 
 function love.update(dt)
     if not gameStop then
-        world:update(dt)
+        --[[if ball.collider:enter('Entity') then
+            ball
+        end]]
+        ball:touch()
 
         if jumpCooldown > 0 then
             jumpCooldown = jumpCooldown - dt
         end
+
+        world:update(dt)
     end
 end
 
