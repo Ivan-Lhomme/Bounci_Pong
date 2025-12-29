@@ -4,16 +4,16 @@ function love.load()
     Ball = require "Ball"
 
     gameStop = false
-    debug = false
+    debug = true
 
     world = wf.newWorld(0, 500, true)
     world:setGravity(0, 500)
 
-    world:addCollisionClass('Entity')
-    world:addCollisionClass('Wall')
     world:addCollisionClass('Ball')
+    world:addCollisionClass('Entity', {ignores = {'Ball'}})
+    world:addCollisionClass('Wall')
     world:addCollisionClass('WinWall')
-    world:addCollisionClass('StuckWall', {ignores = {Ball}})
+    world:addCollisionClass('StuckWall', {ignores = {'Ball'}})
 
     player = Entity:new(0, 400, 200, world)
     player2 = Entity:new(790, 400, 200, world)
@@ -24,7 +24,7 @@ function love.load()
     wallLeftWin:setType('static')
     wallLeftWin:setCollisionClass('WinWall')
 
-    wallRightWin = world:newRectangleCollider(801, 0, 1, 600)
+    wallRightWin = world:newRectangleCollider(802, 0, 1, 600)
     wallRightWin:setType('static')
     wallRightWin:setCollisionClass('WinWall')
 
@@ -49,6 +49,7 @@ function love.update(dt)
     if not gameStop then
         ball:touch()
         player:fJumpCooldown(dt)
+        player2:fJumpCooldown(dt)
 
         world:update(dt)
     end
@@ -66,28 +67,31 @@ function love.draw()
 end
 
 function love.keypressed(key)
+    -- Key for the game
     if key == "escape" then
         gameStop = not gameStop
     end
-
-    if key == "space" then
-        player:jump()
+    if key == "o" then
+        debug = not debug
     end
-
     if key == "r" then
         restartGame()
     end
 
+    -- Key for the player 1
+    if key == "space" then
+        player:jump()
+    end
     if key == "p" then
         player.collider:setRestitution(1.5)
     end
-
     if key == "m" then
         player.collider:setRestitution(0.5)
     end
 
-    if key == "o" then
-        debug = not debug
+    -- Key for the player 2
+    if key == "z" then
+        player2:jump()
     end
 end
 
