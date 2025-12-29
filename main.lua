@@ -21,7 +21,7 @@ function love.load()
 
     ball = Ball:new(world)
 
-    leftWin = BlockWall:new(-2, 10, 1, 600, world)
+    leftWin = BlockWall:new(-2, 0, 1, 600, world)
     rightWin = BlockWall:new(802, 0, 1, 600, world)
 
     leftStuck = BlockWall:new(11, 0, 1, 600, world)
