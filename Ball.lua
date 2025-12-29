@@ -45,6 +45,11 @@ function Ball:touch()
             self.collider:setLinearVelocity(self.vx[1], 0)
         end
     end
+
+    local x = self.collider:getX()
+    if x <= 0 or x >= 800 then
+        restartGame()
+    end
 end
 
 return Ball

@@ -3,7 +3,6 @@ function love.load()
     Entity = require "Entity"
     Ball = require "Ball"
     Wall = require "Wall"
-    WinWall = require "WinWall"
     BlockWall = require "BlockWall"
 
     gameStop = false
@@ -14,8 +13,7 @@ function love.load()
 
     world:addCollisionClass('Ball')
     world:addCollisionClass('Entity', {ignores = {'Ball'}})
-    world:addCollisionClass('Wall')
-    world:addCollisionClass('WinWall')
+    world:addCollisionClass('Wall', {ignores = {'Ball'}})
     world:addCollisionClass('BlockWall', {ignores = {'Ball'}})
 
     player = Entity:new(0, 400, 200, world)
@@ -23,8 +21,8 @@ function love.load()
 
     ball = Ball:new(world)
 
-    leftWin = WinWall:new(-2, 0, 1, 600, world)
-    rightWin = WinWall:new(802, 0, 1, 600, world)
+    leftWin = BlockWall:new(-2, 10, 1, 600, world)
+    rightWin = BlockWall:new(802, 0, 1, 600, world)
 
     leftStuck = BlockWall:new(11, 0, 1, 600, world)
     rightStuck = BlockWall:new(789, 0, 1, 600, world)
