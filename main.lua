@@ -4,8 +4,6 @@ function love.load()
     Ball = require "Ball"
 
     gameStop = false
-    jumpCooldown = 0
-
     debug = false
 
     world = wf.newWorld(0, 500, true)
@@ -50,10 +48,7 @@ end
 function love.update(dt)
     if not gameStop then
         ball:touch()
-
-        if jumpCooldown > 0 then
-            jumpCooldown = jumpCooldown - dt
-        end
+        player:fJumpCooldown(dt)
 
         world:update(dt)
     end
@@ -75,9 +70,8 @@ function love.keypressed(key)
         gameStop = not gameStop
     end
 
-    if key == "space" and jumpCooldown <= 0 then
-        player.collider:applyLinearImpulse(0, -2500)
-        jumpCooldown = 0.5
+    if key == "space" then
+        player:jump()
     end
 
     if key == "r" then
