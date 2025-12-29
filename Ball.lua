@@ -38,8 +38,6 @@ function Ball:touch()
         else
             self.collider:setLinearVelocity(self.velocity[2], 0)
         end
-
-        --gameStop = true
     end
 end
 

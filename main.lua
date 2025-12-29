@@ -49,9 +49,6 @@ end
 
 function love.update(dt)
     if not gameStop then
-        --[[if ball.collider:enter('Entity') then
-            ball
-        end]]
         ball:touch()
 
         if jumpCooldown > 0 then
