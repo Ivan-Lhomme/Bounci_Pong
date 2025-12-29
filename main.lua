@@ -2,9 +2,12 @@ function love.load()
     wf = require "libraries/windfield"
     Entity = require "Entity"
     Ball = require "Ball"
+    Wall = require "Wall"
+    WinWall = require "WinWall"
+    BlockWall = require "BlockWall"
 
     gameStop = false
-    debug = true
+    debug = false
 
     world = wf.newWorld(0, 500, true)
     world:setGravity(0, 500)
@@ -13,36 +16,21 @@ function love.load()
     world:addCollisionClass('Entity', {ignores = {'Ball'}})
     world:addCollisionClass('Wall')
     world:addCollisionClass('WinWall')
-    world:addCollisionClass('StuckWall', {ignores = {'Ball'}})
+    world:addCollisionClass('BlockWall', {ignores = {'Ball'}})
 
     player = Entity:new(0, 400, 200, world)
     player2 = Entity:new(790, 400, 200, world)
 
     ball = Ball:new(world)
 
-    wallLeftWin = world:newRectangleCollider(-2, 0, 1, 600)
-    wallLeftWin:setType('static')
-    wallLeftWin:setCollisionClass('WinWall')
+    leftWin = WinWall:new(-2, 0, 1, 600, world)
+    rightWin = WinWall:new(802, 0, 1, 600, world)
 
-    wallRightWin = world:newRectangleCollider(802, 0, 1, 600)
-    wallRightWin:setType('static')
-    wallRightWin:setCollisionClass('WinWall')
+    leftStuck = BlockWall:new(11, 0, 1, 600, world)
+    rightStuck = BlockWall:new(789, 0, 1, 600, world)
 
-    wallLeftStuck = world:newRectangleCollider(11, 0, 1, 600)
-    wallLeftStuck:setType('static')
-    wallLeftStuck:setCollisionClass('WinWall')
-
-    wallRightStuck = world:newRectangleCollider(789, 0, 1, 600)
-    wallRightStuck:setType('static')
-    wallRightStuck:setCollisionClass('WinWall')
-
-    top = world:newRectangleCollider(0, -1, 800, 1)
-    top:setType('static')
-    top:setCollisionClass('Wall')
-
-    ground = world:newRectangleCollider(0, 600, 800, 1)
-    ground:setType('static')
-    ground:setCollisionClass('Wall')
+    top = Wall:new(0, -1, 800, 1, world)
+    ground = Wall:new(0, 601, 800, 1, world)
 end
 
 function love.update(dt)
