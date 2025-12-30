@@ -36,8 +36,12 @@ function Ball:touch()
     if self.collider:enter('Entity') then
         local vx, vy = self.collider:getLinearVelocity()
         
-        self.vx[1] = self.vx[1] - 40
-        self.vx[2] = self.vx[2] + 40
+        if (self.vx[2] + 440) <= 640 then
+            self.vx[1] = self.vx[1] - 440
+            self.vx[2] = self.vx[2] + 440
+        elseif not (self.vx[2] == 640) then
+            self.vx[2] = 640
+        end
 
         if vx < 0 then
             self.collider:setLinearVelocity(self.vx[2], 0)
@@ -47,7 +51,7 @@ function Ball:touch()
     end
 
     local x = self.collider:getX()
-    if x <= 0 or x >= 800 then
+    if x < -2 or x > 802 then
         restartGame()
     end
 end
