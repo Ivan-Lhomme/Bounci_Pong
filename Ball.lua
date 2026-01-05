@@ -36,9 +36,9 @@ function Ball:touch()
     if self.collider:enter('Entity') then
         local vx, vy = self.collider:getLinearVelocity()
         
-        if (self.vx[2] + 440) <= 640 then
-            self.vx[1] = self.vx[1] - 440
-            self.vx[2] = self.vx[2] + 440
+        if (self.vx[2] + 40) <= 640 then
+            self.vx[1] = self.vx[1] - 40
+            self.vx[2] = self.vx[2] + 40
         elseif not (self.vx[2] == 640) then
             self.vx[2] = 640
         end
