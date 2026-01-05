@@ -34,7 +34,17 @@ end
 
 function Ball:touch()
     if self.collider:enter('Entity') then
+        local collisionData = self.collider:getEnterCollisionData('Entity')
+        local collisionCollider = collisionData.collider:getObject()
+
+        local x1, y1 = collisionCollider.collider:getPosition()
+        local x2, y2 = self.collider:getPosition()
+
         local vx, vy = self.collider:getLinearVelocity()
+
+        local distance = math.sqrt((x2 - x1)^2 + (y2 - y1)^2)*2
+        self.vy[1] = -distance
+        self.vy[2] = distance
         
         if (self.vx[2] + 40) <= 640 then
             self.vx[1] = self.vx[1] - 40
@@ -43,11 +53,16 @@ function Ball:touch()
             self.vx[2] = 640
         end
 
+        local vChoose = {1, 1}
         if vx < 0 then
-            self.collider:setLinearVelocity(self.vx[2], 0)
-        else
-            self.collider:setLinearVelocity(self.vx[1], 0)
+            vChoose[1] = 2
         end
+
+        if y2 > y1 then
+            vChoose[2] = 2
+        end
+
+        self.collider:setLinearVelocity(self.vx[vChoose[1]], self.vy[vChoose[2]])
     end
 
     local x = self.collider:getX()

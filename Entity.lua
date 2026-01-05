@@ -13,6 +13,7 @@ function Entity:new(x, y, height, world)
     entity.collider = world:newRectangleCollider(entity.x, entity.startY, 10, height)
     entity.collider:setRestitution(0.5)
     entity.collider:setCollisionClass('Entity')
+    entity.collider:setObject(entity)
 
     return entity
 end
