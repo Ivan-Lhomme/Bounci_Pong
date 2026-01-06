@@ -33,12 +33,10 @@ function Ball:draw()
 end
 
 function Ball:touch()
-    if self.collider:enter('Entity') then
-        local collisionData = self.collider:getEnterCollisionData('Entity')
-        local collisionCollider = collisionData.collider:getObject()
+    local x2, y2 = self.collider:getPosition()
 
-        local x1, y1 = collisionCollider.collider:getPosition()
-        local x2, y2 = self.collider:getPosition()
+    if self.collider:enter('Entity') then
+        local x1, y1 = self.collider:getEnterCollisionData('Entity').collider:getObject().collider:getPosition()
 
         local vx, vy = self.collider:getLinearVelocity()
 
@@ -65,8 +63,57 @@ function Ball:touch()
         self.collider:setLinearVelocity(self.vx[vChoose[1]], self.vy[vChoose[2]])
     end
 
-    local x = self.collider:getX()
-    if x < -2 or x > 802 then
+    if y2 < 0  then
+        local x1, y1 = 400, -1
+        local x2, y2 = self.collider:getPosition()
+
+        local vx, vy = self.collider:getLinearVelocity()
+
+        local distance = math.sqrt((x2 - x1)^2 + (y2 - y1)^2)*1.5
+        self.vy[1] = -distance
+        self.vy[2] = distance
+        
+        if (self.vx[2] + 40) <= 640 then
+            self.vx[1] = self.vx[1] - 40
+            self.vx[2] = self.vx[2] + 40
+        elseif not (self.vx[2] == 640) then
+            self.vx[2] = 640
+        end
+
+        local vChoose = {2, 2}
+        if vx < 0 then
+            vChoose[1] = 1
+        end
+
+        self.collider:setLinearVelocity(self.vx[vChoose[1]], self.vy[vChoose[2]])
+    end
+
+    if y2 > 600  then
+        local x1, y1 = 400, 601
+        local x2, y2 = self.collider:getPosition()
+
+        local vx, vy = self.collider:getLinearVelocity()
+
+        local distance = math.sqrt((x2 - x1)^2 + (y2 - y1)^2)*1.5
+        self.vy[1] = -distance
+        self.vy[2] = distance
+        
+        if (self.vx[2] + 40) <= 640 then
+            self.vx[1] = self.vx[1] - 40
+            self.vx[2] = self.vx[2] + 40
+        elseif not (self.vx[2] == 640) then
+            self.vx[2] = 640
+        end
+
+        local vChoose = {2, 1}
+        if vx < 0 then
+            vChoose[1] = 1
+        end
+
+        self.collider:setLinearVelocity(self.vx[vChoose[1]], self.vy[vChoose[2]])
+    end
+
+    if x2 < -2 or x2 > 802 then
         restartGame()
     end
 end
